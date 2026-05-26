@@ -1,73 +1,91 @@
-# React + TypeScript + Vite
+# TicTacToe
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+TicTacToe jouable contre un adversaire informatique, avec choix du niveau de difficulté et du pion.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Prérequis
 
-## React Compiler
+- [Node.js](https://nodejs.org/) version 18 ou supérieure
+- npm (inclus avec Node.js)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## Installation et lancement
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# Cloner le projet
+git clone https://github.com/dev-x7k2/tictactoe.git
+cd tictactoe
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# Installer les dépendances
+npm install
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Lancer l'application
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+L'application est accessible sur `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+---
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Comment jouer
+
+1. **Choisir la difficulté** - Facile (coups aléatoires) ou Difficile (adversaire intelligent)
+2. **Choisir son pion** - X ou O
+3. **Jouer** - Cliquer sur une case pour poser son pion
+4. **Rejouer** - Cliquer sur "Rejouer" en fin de partie, sans recharger la page
+
+---
+
+## Configuration
+
+Toute la configuration du jeu se trouve dans `src/config.ts` :
+
+```typescript
+export const GRID_SIZE = 3; // Taille de la grille (ex: 4 pour une grille 4x4)
+export const WIN_LENGTH = 3; // Nombre de pions alignés pour gagner
 ```
+
+Pour passer en grille 4x4 avec 4 alignements requis, modifier uniquement ces deux valeurs :
+
+```typescript
+export const GRID_SIZE = 4;
+export const WIN_LENGTH = 4;
+```
+
+Aucune autre modification n'est nécessaire.
+
+---
+
+## Stack technique
+
+| Technologie | Justification |
+|-------------|---------------|
+| React | Séparation naturelle state/rendu, composants réutilisables |
+| TypeScript | Lisibilité et robustesse du code, typage explicite |
+| Vite | Démarrage rapide, configuration minimale |
+
+---
+
+## Architecture
+
+```
+src/
+├── core/
+│   ├── board.ts        - Création du plateau, validation des coups
+│   ├── rules.ts        - Détection victoire/match nul (N x N configurable)
+│   └── opponent.ts     - Logique adversaire (aléatoire et heuristique)
+├── components/
+│   ├── Board.tsx
+│   ├── Cell.tsx
+│   ├── DifficultyPicker.tsx
+│   ├── PiecePicker.tsx
+│   └── GameStatus.tsx
+├── hooks/
+│   └── useGame.ts      - State management avec useReducer
+├── config.ts           - Paramètres configurables (GRID_SIZE, WIN_LENGTH)
+└── App.tsx
+```
+
+Le state du jeu est centralisé dans `useGame.ts` via `useReducer`. Ce pattern suit la même logique que Redux sans le boilerplate, avec des transitions d'état explicites et atomiques.
