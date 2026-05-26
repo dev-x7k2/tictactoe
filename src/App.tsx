@@ -3,12 +3,17 @@ import { useGame } from './hooks/useGame';
 import { Board } from './components/Board';
 import { PiecePicker } from './components/PiecePicker';
 import { GameStatus } from './components/GameStatus';
+import {DifficultyPicker} from "./components/DifficultyPicker.tsx";
 
 export default function App() {
-  const { state, pickPiece, play, reset } = useGame();
-
+  const { state, pickPiece, play, reset, setDifficulty } = useGame();
+  
   return (
     <div className="app">
+      {state.phase === 'difficulty' && (
+          <DifficultyPicker onPick={setDifficulty} />
+      )}
+      
       {state.phase === 'picking' && (
         <PiecePicker onPick={pickPiece} />
       )}

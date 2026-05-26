@@ -1,31 +1,51 @@
 import {createBoard, isValidMove} from "../core/board.ts";
 import {checkWinner} from "../core/rules.ts";
 import {useReducer} from "react";
-import {getRandomMove} from "../core/opponent.ts";
+import {getBestMove, getRandomMove} from "../core/opponent.ts";
 
 type GameState = {
     board: string[][],
     currentPlayer: 'X' | 'O',
-    phase: 'picking' | 'playing' | 'ended',
-    winner: 'X' | 'O' | 'draw' | null
+    phase: 'difficulty' | 'picking' | 'playing' | 'ended',
+    winner: 'X' | 'O' | 'draw' | null,
+    difficulty: 'easy' | 'hard' | null
 }
 
 type GameAction =
     | { type: 'PICK_PIECE'; payload: 'X' | 'O' }
     | { type: 'PLAY'; payload: { row: number; col: number } }
     | { type: 'RESET' }
+    | { type: 'SET_DIFFICULTY'; payload: 'easy' | 'hard' }
 
 const initialState: GameState = {
     board: createBoard(),
     currentPlayer: 'X',
-    phase: 'picking',
-    winner: null
+    phase: 'difficulty',
+    winner: null,
+    difficulty: null
+}
+
+function playBotMove(board: string[][], botPlayer: string, difficulty: 'easy' | 'hard' | null): string[][] {
+    const move = difficulty === 'hard'
+        ? getBestMove(board, botPlayer)
+        : getRandomMove(board);
+
+    return board.map((row, r) =>
+        row.map((cell, c) => r === move.row && c === move.col ? botPlayer : cell)
+    );
 }
 
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
-        case 'PICK_PIECE':
-            return { ...state, currentPlayer: action.payload, phase: 'playing' };
+        case 'SET_DIFFICULTY':
+            return { ...state, difficulty: action.payload, phase: 'picking' };
+        case 'PICK_PIECE': {
+            if (action.payload === 'O') {
+                const boardAfterBot = playBotMove(state.board, 'X', state.difficulty);
+                return { ...state, board: boardAfterBot, currentPlayer: 'O', phase: 'playing' };
+            }
+            return { ...state, currentPlayer: 'X', phase: 'playing' };
+        }
         case 'PLAY': {
             if (!isValidMove(state.board, action.payload.row, action.payload.col)) {
                 return state;
@@ -47,19 +67,14 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
             const nextPlayer = state.currentPlayer === 'X' ? 'O' : 'X';
 
-            const aiMove = getRandomMove(newBoard);
-            const aiBoard = newBoard.map((row, r) =>
-                row.map((cell, c) =>
-                    r === aiMove.row && c === aiMove.col ? nextPlayer : cell
-                )
-            );
+            const botBoard = playBotMove(newBoard, nextPlayer, state.difficulty);
 
-            const aiWinner = checkWinner(aiBoard);
+            const aiWinner = checkWinner(botBoard);
             if (aiWinner) {
-                return { ...state, board: aiBoard, phase: 'ended', winner: aiWinner };
+                return { ...state, board: botBoard, phase: 'ended', winner: aiWinner };
             }
 
-            return { ...state, board: aiBoard, currentPlayer: state.currentPlayer };
+            return { ...state, board: botBoard, currentPlayer: state.currentPlayer };
         }
         case 'RESET':
             return initialState;
@@ -71,6 +86,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 export function useGame() {
     const [state, dispatch] = useReducer(gameReducer, initialState);
 
+    const setDifficulty = (difficulty: 'easy' | 'hard') =>
+        dispatch({ type: 'SET_DIFFICULTY', payload: difficulty });
+
     const pickPiece = (player: 'X' | 'O') =>
         dispatch({ type: 'PICK_PIECE', payload: player });
 
@@ -80,5 +98,5 @@ export function useGame() {
     const reset = () =>
         dispatch({ type: 'RESET' });
 
-    return { state, pickPiece, play, reset };
+    return { state, pickPiece, play, reset, setDifficulty };
 }
