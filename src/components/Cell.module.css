@@ -1,0 +1,28 @@
+.cell {
+  width: 100%;
+  height: 100%;
+  background: var(--card);
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-cell);
+  font-weight: 900;
+  line-height: 1;
+  transition: background 0.12s;
+  color: inherit;
+}
+
+.cell:hover:not(:disabled) {
+  background: #263348;
+}
+
+.cell:disabled {
+  cursor: default;
+}
+
+.x {
+  color: var(--x);
+}
+
+.o {
+  color: var(--o);
+}

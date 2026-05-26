@@ -1,3 +1,4 @@
+import styles from './Board.module.css';
 import { Cell } from './Cell';
 
 type BoardProps = {
@@ -7,9 +8,9 @@ type BoardProps = {
 
 export function Board({ board, onPlay }: BoardProps) {
     return (
-        <div>
+        <div className={styles.board}>
             {board.map((row, r) => (
-                <div key={r}>
+                <div key={r} className={styles.row}>
                     {row.map((cell, c) => (
                         <Cell key={c} value={cell} onClick={() => onPlay(r, c)} />
                     ))}

@@ -1,3 +1,4 @@
+import './App.css';
 import { useGame } from './hooks/useGame';
 import { Board } from './components/Board';
 import { PiecePicker } from './components/PiecePicker';
@@ -7,21 +8,21 @@ export default function App() {
   const { state, pickPiece, play, reset } = useGame();
 
   return (
-      <div>
-        {state.phase === 'picking' && (
-            <PiecePicker onPick={pickPiece} />
-        )}
+    <div className="app">
+      {state.phase === 'picking' && (
+        <PiecePicker onPick={pickPiece} />
+      )}
 
-        {state.phase === 'playing' && (
-            <Board board={state.board} onPlay={play} />
-        )}
+      {state.phase === 'playing' && (
+        <Board board={state.board} onPlay={play} />
+      )}
 
-        {state.phase === 'ended' && (
-            <>
-              <Board board={state.board} onPlay={play} />
-              <GameStatus winner={state.winner} onReset={reset} />
-            </>
-        )}
-      </div>
+      {state.phase === 'ended' && (
+        <>
+          <Board board={state.board} onPlay={play} />
+          <GameStatus winner={state.winner} onReset={reset} />
+        </>
+      )}
+    </div>
   );
 }
