@@ -78,7 +78,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             return { ...state, board: botBoard, currentPlayer: state.currentPlayer };
         }
         case 'RESET':
-            return initialState;
+            return { ...initialState, board: createBoard() };
         default:
             return state;
     }
