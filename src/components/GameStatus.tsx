@@ -1,7 +1,7 @@
 import styles from './GameStatus.module.css';
 
 type GameStatusProps = {
-    winner: 'X' | 'O' | 'draw' | null,
+    winner: 'X' | 'O' | 'draw',
     onReset: () => void,
 }
 
