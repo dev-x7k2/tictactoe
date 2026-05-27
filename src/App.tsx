@@ -25,7 +25,7 @@ export default function App() {
       {state.phase === 'ended' && (
         <>
           <Board board={state.board} onPlay={play} disabled={true} />
-          <GameStatus winner={state.winner} onReset={reset} />
+          <GameStatus winner={state.winner!} onReset={reset} />
         </>
       )}
     </div>

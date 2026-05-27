@@ -72,9 +72,9 @@ function gameReducer(state: GameState, action: GameAction): GameState {
 
             const botBoard = playBotMove(newBoard, nextPlayer, state.difficulty);
 
-            const aiWinner = checkWinner(botBoard);
-            if (aiWinner) {
-                return { ...state, board: botBoard, phase: 'ended', winner: aiWinner };
+            const botWinner = checkWinner(botBoard);
+            if (botWinner) {
+                return { ...state, board: botBoard, phase: 'ended', winner: botWinner };
             }
 
             return { ...state, board: botBoard, currentPlayer: state.currentPlayer };
