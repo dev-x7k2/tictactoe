@@ -15,6 +15,11 @@ function getEmptyCells(board: string[][]): { row: number, col: number }[] {
 
 export function getRandomMove(board: string[][]): { row: number, col: number } {
     const emptyCells = getEmptyCells(board);
+
+    if (emptyCells.length === 0) {
+        throw new Error('No empty cells available');
+    }
+    
     const index = Math.floor(Math.random() * emptyCells.length);
     return emptyCells[index];
 }
@@ -29,6 +34,10 @@ export function getBestMove(board: string[][], botPlayer: string): { row: number
     const humanPlayer = botPlayer === 'X' ? 'O' : 'X';
     const emptyCells = getEmptyCells(board);
 
+    if (emptyCells.length === 0) {
+        throw new Error('No empty cells available');
+    }
+    
     // Verifier si le bot peut gagner ce tour
     for (const cell of emptyCells) {
         const newBoard = simulateMove(board, cell.row, cell.col, botPlayer);
