@@ -8,7 +8,7 @@ type GameState = {
     currentPlayer: 'X' | 'O',
     phase: 'difficulty' | 'picking' | 'playing' | 'ended',
     winner: 'X' | 'O' | 'draw' | null,
-    difficulty: 'easy' | 'hard' | null
+    difficulty: 'easy' | 'hard'
 }
 
 type GameAction =
@@ -22,7 +22,7 @@ const initialState: GameState = {
     currentPlayer: 'X',
     phase: 'difficulty',
     winner: null,
-    difficulty: null
+    difficulty: "easy"
 }
 
 function playBotMove(board: string[][], botPlayer: string, difficulty: 'easy' | 'hard' | null): string[][] {
