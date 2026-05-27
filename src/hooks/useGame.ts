@@ -38,8 +38,10 @@ function playBotMove(board: string[][], botPlayer: string, difficulty: 'easy' | 
 function gameReducer(state: GameState, action: GameAction): GameState {
     switch (action.type) {
         case 'SET_DIFFICULTY':
+            if (state.phase !== 'difficulty') return state;
             return { ...state, difficulty: action.payload, phase: 'picking' };
         case 'PICK_PIECE': {
+            if (state.phase !== 'picking') return state;
             if (action.payload === 'O') {
                 const boardAfterBot = playBotMove(state.board, 'X', state.difficulty);
                 return { ...state, board: boardAfterBot, currentPlayer: 'O', phase: 'playing' };
