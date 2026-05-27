@@ -19,12 +19,12 @@ export default function App() {
       )}
 
       {state.phase === 'playing' && (
-        <Board board={state.board} onPlay={play} />
+          <Board board={state.board} onPlay={play} disabled={false} />
       )}
 
       {state.phase === 'ended' && (
         <>
-          <Board board={state.board} onPlay={play} />
+          <Board board={state.board} onPlay={play} disabled={true} />
           <GameStatus winner={state.winner} onReset={reset} />
         </>
       )}

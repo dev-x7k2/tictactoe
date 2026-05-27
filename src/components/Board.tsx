@@ -4,6 +4,7 @@ import { Cell } from './Cell';
 type BoardProps = {
     board: string[][],
     onPlay: (row: number, col: number) => void,
+    disabled: boolean,
 }
 
 export function Board({ board, onPlay }: BoardProps) {

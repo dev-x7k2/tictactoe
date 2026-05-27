@@ -47,6 +47,7 @@ function gameReducer(state: GameState, action: GameAction): GameState {
             return { ...state, currentPlayer: 'X', phase: 'playing' };
         }
         case 'PLAY': {
+            if (state.phase !== 'playing') return state;
             if (!isValidMove(state.board, action.payload.row, action.payload.col)) {
                 return state;
             }
