@@ -1,3 +1,4 @@
+import React from 'react';
 import styles from './Board.module.css';
 import { Cell } from './Cell';
 
@@ -9,7 +10,7 @@ type BoardProps = {
 
 export function Board({ board, onPlay }: BoardProps) {
     return (
-        <div className={styles.board}>
+        <div className={styles.board} style={{ '--cols': board.length } as React.CSSProperties}>
             {board.map((row, r) => (
                 <div key={r} className={styles.row}>
                     {row.map((cell, c) => (

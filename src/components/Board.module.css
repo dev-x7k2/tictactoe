@@ -1,7 +1,10 @@
 .board {
+  --cols: 3;
+  --cell-size: clamp(40px, calc(90vmin / var(--cols)), 120px);
+  --font-size: calc(var(--cell-size) * 0.45);
   display: grid;
-  grid-template-columns: repeat(3, var(--cell));
-  grid-template-rows: repeat(3, var(--cell));
+  grid-template-columns: repeat(var(--cols), var(--cell-size));
+  grid-template-rows: repeat(var(--cols), var(--cell-size));
   gap: 3px;
   background: var(--border);
   border: 3px solid var(--border);

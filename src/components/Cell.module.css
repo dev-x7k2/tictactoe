@@ -4,7 +4,7 @@
   background: var(--card);
   border: none;
   cursor: pointer;
-  font-size: var(--font-cell);
+  font-size: var(--font-size, var(--font-cell));
   font-weight: 900;
   line-height: 1;
   transition: background 0.12s;
